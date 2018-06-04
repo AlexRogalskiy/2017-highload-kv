@@ -1,6 +1,7 @@
 package ru.mail.polis;
 
 import org.apache.http.client.fluent.Request;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
 import org.junit.*;
 import org.junit.rules.Timeout;
@@ -43,7 +44,7 @@ public class StartStopTest extends TestBase {
     }
 
     private static int status() throws IOException {
-        return Request.Get("http://localhost:" + port + "/v0/status")
+        return Request.Get("http://127.0.0.1:" + port + "/v0/status")
                 .connectTimeout((int) TIMEOUT_MS)
                 .socketTimeout((int) TIMEOUT_MS)
                 .execute()
@@ -58,7 +59,7 @@ public class StartStopTest extends TestBase {
         try {
             // Should not respond before start
             status();
-        } catch (SocketTimeoutException e) {
+        } catch (SocketTimeoutException | ConnectTimeoutException e) {
             // Do nothing
         }
     }
@@ -75,7 +76,7 @@ public class StartStopTest extends TestBase {
         try {
             // Should not respond after stop
             status();
-        } catch (SocketTimeoutException | HttpHostConnectException e) {
+        } catch (SocketTimeoutException | ConnectTimeoutException | HttpHostConnectException e) {
             // Do nothing
         }
     }

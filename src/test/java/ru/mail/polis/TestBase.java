@@ -40,6 +40,6 @@ abstract class TestBase {
 
     @NotNull
     static String endpoint(final int port) {
-        return "http://localhost:" + port;
+        return "http://127.0.0.1:" + port;
     }
 }
